@@ -297,7 +297,7 @@ Public Class F01_Personal
 
                 'Grabar cabecera
                 Dim res As Boolean = L_fnGrabarPersonal(numi, desc, direc, telef, cat, sal, ci, obs, fnac, fing,
-                                                        fret, fot, est, eciv, plan, reloj, cbSucursal.Value)
+                                                        fret, fot, est, eciv, plan, reloj, cbSucursal.Value, tbCodigoInterno.Value)
 
                 If (res) Then
                     P_Limpiar()
@@ -349,7 +349,7 @@ Public Class F01_Personal
 
                 'Modificar
                 Dim res As Boolean = L_fnModificarPersonal(numi, desc, direc, telef, cat, sal, ci, obs, fnac, fing,
-                                                           fret, fot, est, eciv, plan, reloj, cbSucursal.Value)
+                                                           fret, fot, est, eciv, plan, reloj, cbSucursal.Value, tbCodigoInterno.Value)
 
                 If (res) Then
                     Bool = False
@@ -423,6 +423,8 @@ Public Class F01_Personal
         cbSucursal.ReadOnly = False
         'Botones
         SbEstado.IsReadOnly = False
+
+        tbCodigoInterno.IsInputReadOnly = False
     End Sub
 
     Private Sub P_Deshabilitar()
@@ -435,6 +437,9 @@ Public Class F01_Personal
         CbAlmacen.ReadOnly = True
         CbAlmacen.Visible = False 'gs_Parametros(0).Item("syruta")
         cbSucursal.ReadOnly = True
+
+        tbCodigoInterno.IsInputReadOnly = True
+
         'Botones
         SbEstado.IsReadOnly = True
     End Sub
@@ -444,7 +449,7 @@ Public Class F01_Personal
         TbCodigo.Clear()
         TbNombre.Clear()
         TbPassMovil.Clear()
-
+        tbCodigoInterno.Value = ObtenerCodigoMayor() + 1
         'MultiCombo
         If (CType(cbTipo.DataSource, DataTable).Rows.Count > 0) Then
             cbTipo.SelectedIndex = 0
@@ -508,6 +513,7 @@ Public Class F01_Personal
                 TbCodigo.Text = .Cells("cbnumi").Value.ToString
                 TbNombre.Text = .Cells("cbdesc").Value.ToString
                 TbPassMovil.Text = .Cells("cbci").Value.ToString
+                tbCodigoInterno.Value = .Cells("codigo").Value
                 cbSucursal.Value = .Cells("cbalmacen").Value
                 cbTipo.Clear()
                 If (CType(cbTipo.DataSource, DataTable).Rows.Count > 0) Then
@@ -552,6 +558,15 @@ Public Class F01_Personal
 
         'dar formato a las columnas
         With Dgj1Busqueda.RootTable.Columns("cbnumi")
+            .Caption = "Código"
+            .Width = 50
+            .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
+            .CellStyle.FontSize = gi_fuenteTamano
+            .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
+            .Visible = False
+        End With
+
+        With Dgj1Busqueda.RootTable.Columns("codigo")
             .Caption = "Código"
             .Width = 50
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
@@ -700,7 +715,56 @@ Public Class F01_Personal
             Exit Function
         End If
 
+
+        If (Nuevo) Then
+            If (ObtenerCodigoEnProductos(tbCodigoInterno.Value, -1) = True) Then
+                tbCodigoInterno.BackColor = Color.Red
+                MEP.SetError(tbCodigoInterno, "Codigo ya existente!".ToUpper)
+                Return False
+            Else tbCodigoInterno.BackColor = Color.White
+                MEP.SetError(tbCodigoInterno, "")
+
+            End If
+
+
+        End If
+        If (Modificar) Then
+            If (ObtenerCodigoEnProductos(tbCodigoInterno.Value, TbCodigo.Text) = True) Then
+                tbCodigoInterno.BackColor = Color.Red
+                MEP.SetError(tbCodigoInterno, "Codigo ya existente!".ToUpper)
+                Return False
+            Else tbCodigoInterno.BackColor = Color.White
+                MEP.SetError(tbCodigoInterno, "")
+
+            End If
+        End If
+
         Return True
+    End Function
+    Public Function ObtenerCodigoMayor() As Integer
+
+        Dim mayor As Integer = 0
+        Dim dt As DataTable = CType(Dgj1Busqueda.DataSource, DataTable)
+        For i As Integer = 0 To dt.Rows.Count - 1 Step 1
+
+            If (dt.Rows(i).Item("codigo") > mayor) Then
+                mayor = dt.Rows(i).Item("codigo")
+            End If
+        Next
+        Return mayor
+    End Function
+
+    Public Function ObtenerCodigoEnProductos(CodProducto As Integer, numi As Integer) As Boolean
+
+        Dim mayor As Integer = 0
+        Dim dt As DataTable = CType(Dgj1Busqueda.DataSource, DataTable)
+        For i As Integer = 0 To dt.Rows.Count - 1 Step 1
+
+            If (dt.Rows(i).Item("codigo") = CodProducto And dt.Rows(i).Item("cbnumi") <> numi) Then
+                Return True
+            End If
+        Next
+        Return False
     End Function
 
     Private Sub Dgj1Busqueda_DoubleClick(sender As Object, e As EventArgs) Handles Dgj1Busqueda.DoubleClick

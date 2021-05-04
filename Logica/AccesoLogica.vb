@@ -5217,7 +5217,7 @@ Public Class AccesoLogica
     Public Shared Function L_fnGrabarPersonal(ByRef numi As String, desc As String, direc As String, telef As String,
                                               cat As String, sal As String, ci As String, obs As String, fnac As String,
                                               fing As String, fret As String, fot As String, est As String,
-                                              eciv As String, plan As String, reloj As String, cbalmacen As Integer) As Boolean
+                                              eciv As String, plan As String, reloj As String, cbalmacen As Integer, codigo As Integer) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
@@ -5242,6 +5242,7 @@ Public Class AccesoLogica
         _listParam.Add(New Datos.DParametro("@reloj", reloj))
         _listParam.Add(New Datos.DParametro("@cbalmacen", cbalmacen))
         _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
+        _listParam.Add(New Datos.DParametro("@codigo", codigo))
 
         _Tabla = D_ProcedimientoConParam("sp_go_TC002", _listParam)
 
@@ -5258,7 +5259,7 @@ Public Class AccesoLogica
     Public Shared Function L_fnModificarPersonal(ByRef numi As String, desc As String, direc As String, telef As String,
                                                   cat As String, sal As String, ci As String, obs As String, fnac As String,
                                                   fing As String, fret As String, fot As String, est As String,
-                                                  eciv As String, plan As String, reloj As String, cbalmacen As Integer) As Boolean
+                                                  eciv As String, plan As String, reloj As String, cbalmacen As Integer, codigo As Integer) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
@@ -5283,7 +5284,7 @@ Public Class AccesoLogica
         _listParam.Add(New Datos.DParametro("@reloj", reloj))
         _listParam.Add(New Datos.DParametro("@cbalmacen", cbalmacen))
         _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
-
+        _listParam.Add(New Datos.DParametro("@codigo", codigo))
         _Tabla = D_ProcedimientoConParam("sp_go_TC002", _listParam)
 
         If _Tabla.Rows.Count > 0 Then
