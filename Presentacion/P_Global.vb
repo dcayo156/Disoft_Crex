@@ -132,15 +132,20 @@ Module P_Global
                     ee.Handled = True
                 End If
             Case 3
-                If (Char.IsNumber(ee.KeyChar)) Then
+                If (Char.IsNumber(ee.KeyChar) Or "-".Contains(ee.KeyChar)) Then
                     ee.Handled = False
                 ElseIf (ee.KeyChar.Equals(gs_separadorDecimal)) Then
                     Dim tb As TextBox = CType(sender, TextBox)
-                    If (tb.Text.Contains(gs_separadorDecimal)) Then
-                        ee.Handled = True
+                    If (Not IsNothing(tb)) Then
+                        If (tb.Text.Contains(gs_separadorDecimal)) Then
+                            ee.Handled = True
+                        Else
+                            ee.Handled = False
+                        End If
                     Else
                         ee.Handled = False
                     End If
+
                 ElseIf (ChrW(Keys.Back) = (ee.KeyChar)) Then
                     ee.Handled = False
                 ElseIf (ChrW(Keys.Delete) = (ee.KeyChar)) Then

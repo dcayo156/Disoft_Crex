@@ -293,6 +293,9 @@ Public Class F01_Producto
         cbgrupo4.ReadOnly = Not flat
         cbUMed.ReadOnly = Not flat
         CbUnidVenta.ReadOnly = Not flat
+
+        tbCodigoInterno.IsInputReadOnly = Not flat
+
         CbUnidMax.ReadOnly = Not flat
         TbConversion.IsInputReadOnly = Not flat
 
@@ -302,7 +305,38 @@ Public Class F01_Producto
 
     End Sub
 
+    Public Function ObtenerCodigoMayor() As Integer
+
+        Dim mayor As Integer = 0
+        Dim dt As DataTable = CType(DgjBusqueda.DataSource, DataTable)
+        For i As Integer = 0 To dt.Rows.Count - 1 Step 1
+
+            If (dt.Rows(i).Item("codigo") > mayor) Then
+                mayor = dt.Rows(i).Item("codigo")
+            End If
+        Next
+        Return mayor
+    End Function
+
+    Public Function ObtenerCodigoEnProductos(CodProducto As Integer, numi As Integer) As Boolean
+
+        Dim mayor As Integer = 0
+        Dim dt As DataTable = CType(DgjBusqueda.DataSource, DataTable)
+        For i As Integer = 0 To dt.Rows.Count - 1 Step 1
+
+            If (dt.Rows(i).Item("codigo") = CodProducto And dt.Rows(i).Item("numi") <> numi) Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
+
     Private Sub P_prLimpiar()
+
+
+
+
         TbCodigo.Clear()
         TbCodFlex.Clear()
         tbCodBarra.Clear()
@@ -335,6 +369,7 @@ Public Class F01_Producto
 
         P_prArmarGrillaPack(-1)
 
+        tbCodigoInterno.Value = ObtenerCodigoMayor() + 1
     End Sub
 
     Private Sub P_prArmarCombos()
@@ -377,6 +412,7 @@ Public Class F01_Producto
 
     Private Sub P_prLlenarDatos(ByVal index As Integer)
         If (index <= DgjBusqueda.GetRows.Count - 1 And index >= 0) Then
+            Dim dt As DataTable = CType(DgjBusqueda.DataSource, DataTable)
             If (BoNavegar) Then
                 With DgjBusqueda
                     Me.TbCodigo.Text = .GetValue("numi").ToString
@@ -388,6 +424,10 @@ Public Class F01_Producto
                     Me.SbStock.Value = .GetValue("stc")
                     Me.SbEstado.Value = .GetValue("est")
                     Me.SbEquipo.Value = .GetValue("serie")
+
+                    Dim valueCodigo As Double = .GetValue("codigo")
+                    tbCodigoInterno.Value = valueCodigo
+
                     Me.DaFecha = .GetValue("fing")
                     Me.CbEmpresa.Value = .GetValue("cemp")
                     Me.cbDosificacion.Value = .GetValue("caDosificacionId")
@@ -572,7 +612,7 @@ Public Class F01_Producto
                 Dim res As Boolean = L_fnProductoGrabar(numi, cod, desc, desc2, cat, img, stc, est, serie, pcom, fing, cemp, barra,
                                                         smin, gr1, gr2, gr3, gr4, umed, umin, umax, conv, pack,
                                                         CType(JGProdPack.DataSource, DataTable), TipoDoc,
-                                                         DosificaionId)
+                                                         DosificaionId, tbCodigoInterno.Value)
 
                 If (res) Then
                     If (IsNothing(vlImagen) = False) Then
@@ -654,7 +694,7 @@ Public Class F01_Producto
                 'Grabar
                 Dim res As Boolean = L_fnProductoModificar(numi, cod, desc, desc2, cat, img, stc, est, serie,
                                                            pcom, fing, cemp, barra, smin, gr1, gr2, gr3, gr4, umed,
-                                                           umin, umax, conv, pack, dt, TipoDoc, DosificaionId)
+                                                           umin, umax, conv, pack, dt, TipoDoc, DosificaionId, tbCodigoInterno.Value)
 
                 If (res) Then
                     If (IsNothing(vlImagen) = False) Then
@@ -965,7 +1005,7 @@ Public Class F01_Producto
         DgjBusqueda.RetrieveStructure()
 
         'dar formato a las columnas
-        With DgjBusqueda.RootTable.Columns(0)
+        With DgjBusqueda.RootTable.Columns("numi")
             .Caption = "Código"
             .Key = "numi"
             .Width = 80
@@ -973,9 +1013,21 @@ Public Class F01_Producto
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
             .CellStyle.Font = FtNormal
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
+            .Visible = False
+        End With
+
+
+        With DgjBusqueda.RootTable.Columns("codigo")
+            .Caption = "Código"
+            .Key = "codigo"
+            .Width = 80
+            .HeaderStyle.Font = FtTitulo
+            .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
+            .CellStyle.Font = FtNormal
+            .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(1)
+        With DgjBusqueda.RootTable.Columns("cod")
             .Caption = "Cod.Flex"
             .Key = "cod"
             .Width = 80
@@ -985,7 +1037,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(2)
+        With DgjBusqueda.RootTable.Columns(3)
             .Caption = "Nombre"
             .Key = "desc"
             .Width = 350
@@ -995,7 +1047,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(3)
+        With DgjBusqueda.RootTable.Columns(4)
             .Caption = "Nombre Corto"
             .Key = "desc2"
             .Width = 200
@@ -1005,7 +1057,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(4)
+        With DgjBusqueda.RootTable.Columns(5)
             .Caption = ""
             .Key = "cat"
             .Width = 0
@@ -1015,7 +1067,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(5)
+        With DgjBusqueda.RootTable.Columns(6)
             .Caption = "Categoría"
             .Key = "ncat"
             .Width = 120
@@ -1025,7 +1077,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(6)
+        With DgjBusqueda.RootTable.Columns(7)
             .Caption = ""
             .Key = "nimg"
             .Width = 0
@@ -1035,7 +1087,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(7)
+        With DgjBusqueda.RootTable.Columns(8)
             .Caption = "Imagen"
             .Key = "img"
             .Width = 130
@@ -1045,7 +1097,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(8)
+        With DgjBusqueda.RootTable.Columns(9)
             .Caption = "Stock"
             .Key = "stc"
             .Width = 80
@@ -1055,7 +1107,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Center
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(9)
+        With DgjBusqueda.RootTable.Columns(10)
             .Caption = "Estado"
             .Key = "est"
             .Width = 80
@@ -1065,7 +1117,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Center
             .Visible = True
         End With
-        With DgjBusqueda.RootTable.Columns(10)
+        With DgjBusqueda.RootTable.Columns(11)
             .Caption = " Es Equipo?"
             .Key = "serie"
             .Width = 80
@@ -1075,7 +1127,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Center
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(11)
+        With DgjBusqueda.RootTable.Columns(12)
             .Caption = ""
             .Key = "com"
             .Width = 0
@@ -1085,7 +1137,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(12)
+        With DgjBusqueda.RootTable.Columns(13)
             .Caption = ""
             .Key = "fing"
             .Width = 0
@@ -1095,7 +1147,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(13)
+        With DgjBusqueda.RootTable.Columns(14)
             .Caption = ""
             .Key = "cemp"
             .Width = 0
@@ -1105,7 +1157,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(14)
+        With DgjBusqueda.RootTable.Columns(15)
             .Caption = "EMPRESA"
             .Key = "ncemp"
             .Width = 150
@@ -1115,7 +1167,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(15)
+        With DgjBusqueda.RootTable.Columns(16)
             .Caption = ""
             .Key = "fact"
             .Width = 0
@@ -1125,7 +1177,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(16)
+        With DgjBusqueda.RootTable.Columns(17)
             .Caption = ""
             .Key = "hact"
             .Width = 0
@@ -1135,7 +1187,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(17)
+        With DgjBusqueda.RootTable.Columns(18)
             .Caption = ""
             .Key = "uact"
             .Width = 0
@@ -1145,7 +1197,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(18)
+        With DgjBusqueda.RootTable.Columns(19)
             .Caption = ""
             .Key = "cacbarra"
             .Width = 0
@@ -1155,7 +1207,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(19)
+        With DgjBusqueda.RootTable.Columns(20)
             .Caption = ""
             .Key = "casmin"
             .Width = 0
@@ -1165,7 +1217,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(20)
+        With DgjBusqueda.RootTable.Columns(21)
             .Caption = ""
             .Key = "cagr1"
             .Width = 0
@@ -1175,7 +1227,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(21)
+        With DgjBusqueda.RootTable.Columns(22)
             .Caption = ""
             .Key = "cagr2"
             .Width = 0
@@ -1185,7 +1237,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(22)
+        With DgjBusqueda.RootTable.Columns(23)
             .Caption = ""
             .Key = "cagr3"
             .Width = 0
@@ -1195,7 +1247,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(23)
+        With DgjBusqueda.RootTable.Columns(24)
             .Caption = ""
             .Key = "cagr4"
             .Width = 0
@@ -1205,7 +1257,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(24)
+        With DgjBusqueda.RootTable.Columns(25)
             .Caption = ""
             .Key = "caumed"
             .Width = 0
@@ -1215,7 +1267,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(25)
+        With DgjBusqueda.RootTable.Columns(26)
             .Caption = ""
             .Key = "cauventa"
             .Width = 0
@@ -1225,7 +1277,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(26)
+        With DgjBusqueda.RootTable.Columns(27)
             .Caption = ""
             .Key = "caumax"
             .Width = 0
@@ -1235,7 +1287,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(27)
+        With DgjBusqueda.RootTable.Columns(28)
             .Caption = ""
             .Key = "caconv"
             .Width = 0
@@ -1245,7 +1297,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(28)
+        With DgjBusqueda.RootTable.Columns(29)
             .Caption = ""
             .Key = "capack"
             .Width = 0
@@ -1255,7 +1307,7 @@ Public Class F01_Producto
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Near
             .Visible = False
         End With
-        With DgjBusqueda.RootTable.Columns(29)
+        With DgjBusqueda.RootTable.Columns(30)
             .Visible = False
         End With
         'Habilitar Filtradores
@@ -1367,6 +1419,28 @@ Public Class F01_Producto
         Else
             TbNombre.BackColor = Color.White
             MEP.SetError(TbNombre, "")
+        End If
+        If (BoNuevo) Then
+            If (ObtenerCodigoEnProductos(tbCodigoInterno.Value, -1) = True) Then
+                tbCodigoInterno.BackColor = Color.Red
+                MEP.SetError(tbCodigoInterno, "Codigo ya existente!".ToUpper)
+                res = False
+            Else tbCodigoInterno.BackColor = Color.White
+                MEP.SetError(tbCodigoInterno, "")
+
+            End If
+
+
+        End If
+        If (BoModificar) Then
+            If (ObtenerCodigoEnProductos(tbCodigoInterno.Value, TbCodigo.Text) = True) Then
+                tbCodigoInterno.BackColor = Color.Red
+                MEP.SetError(tbCodigoInterno, "Codigo ya existente!".ToUpper)
+                res = False
+            Else tbCodigoInterno.BackColor = Color.White
+                MEP.SetError(tbCodigoInterno, "")
+
+            End If
         End If
 
         If (TbNombreCorto.Text = String.Empty) Then

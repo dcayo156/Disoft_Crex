@@ -2588,7 +2588,7 @@ Public Class AccesoLogica
                                               barra As String, smin As String, gr1 As String, gr2 As String,
                                               gr3 As String, gr4 As String, umed As String, umin As String,
                                               umax As String, conv As Integer, pack As Integer, _TC0013 As DataTable, tipoDoc As Integer,
-                                              dosificaionId As String) As Boolean
+                                              dosificaionId As String, Codigo As Integer) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
@@ -2620,6 +2620,7 @@ Public Class AccesoLogica
         _listParam.Add(New Datos.DParametro("@conv", conv))
         _listParam.Add(New Datos.DParametro("@pack", pack))
         _listParam.Add(New Datos.DParametro("@tipoDoc", tipoDoc))
+        _listParam.Add(New Datos.DParametro("@codigo", Codigo))
         _listParam.Add(New Datos.DParametro("@dosificaionId", dosificaionId))
         _listParam.Add(New Datos.DParametro("@TC0013", "", _TC0013))
 
@@ -2642,7 +2643,7 @@ Public Class AccesoLogica
                                                  barra As String, smin As String, gr1 As String, gr2 As String,
                                                  gr3 As String, gr4 As String, umed As String, umin As String,
                                                  umax As String, conv As Integer, pack As Integer, _TC0013 As DataTable, tipoDoc As Integer,
-                                                 dosificaionId As String) As Boolean
+                                                 dosificaionId As String, Codigo As Integer) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
@@ -2661,6 +2662,7 @@ Public Class AccesoLogica
         _listParam.Add(New Datos.DParametro("@pcom", pcom))
         _listParam.Add(New Datos.DParametro("@fing", fing))
         _listParam.Add(New Datos.DParametro("@cemp", cemp))
+        _listParam.Add(New Datos.DParametro("@codigo", Codigo))
         _listParam.Add(New Datos.DParametro("@uact", L_Usuario))
         _listParam.Add(New Datos.DParametro("@cbarra", barra))
         _listParam.Add(New Datos.DParametro("@smin", smin))
@@ -2823,7 +2825,7 @@ Public Class AccesoLogica
                                              acuEst As String, acuObs As String, tcre As String,
                                              dtDet1 As DataTable, dtDet2 As DataTable, giFrec As String,
                                              frecvisita As String, lunes As Integer, martes As Integer, miercoles As Integer,
-                                             jueves As Integer, viernes As Integer, sabado As Integer, domingo As Integer) As Boolean
+                                             jueves As Integer, viernes As Integer, sabado As Integer, domingo As Integer, Adicional01 As String, Adicional02 As String, Adicional03 As String, Adicional04 As String) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
@@ -2831,6 +2833,12 @@ Public Class AccesoLogica
 
         _listParam.Add(New Datos.DParametro("@tipo", 1))
         _listParam.Add(New Datos.DParametro("@ccnumi", numi))
+
+        _listParam.Add(New Datos.DParametro("@Adicional01", Adicional01))
+        _listParam.Add(New Datos.DParametro("@Adicional02", Adicional02))
+        _listParam.Add(New Datos.DParametro("@Adicional03", Adicional03))
+        _listParam.Add(New Datos.DParametro("@Adicional04", Adicional04))
+
         _listParam.Add(New Datos.DParametro("@cccod", cod))
         _listParam.Add(New Datos.DParametro("@ccdesc", desc))
         _listParam.Add(New Datos.DParametro("@cczona", zona))
@@ -2909,13 +2917,19 @@ Public Class AccesoLogica
                                                 acuEst As String, acuObs As String, tcre As String,
                                                 dtDet1 As DataTable, dtDet2 As DataTable, giFrec As String,
                                                 frecvisita As String, lunes As Integer, martes As Integer, miercoles As Integer,
-                                                jueves As Integer, viernes As Integer, sabado As Integer, domingo As Integer) As Boolean
+                                                jueves As Integer, viernes As Integer, sabado As Integer, domingo As Integer, Adicional01 As String, Adicional02 As String, Adicional03 As String, Adicional04 As String) As Boolean
         Dim _resultado As Boolean
 
         Dim _Tabla As DataTable
         Dim _listParam As New List(Of Datos.DParametro)
 
         _listParam.Add(New Datos.DParametro("@tipo", 2))
+
+        _listParam.Add(New Datos.DParametro("@Adicional01", Adicional01))
+        _listParam.Add(New Datos.DParametro("@Adicional02", Adicional02))
+        _listParam.Add(New Datos.DParametro("@Adicional03", Adicional03))
+        _listParam.Add(New Datos.DParametro("@Adicional04", Adicional04))
+
         _listParam.Add(New Datos.DParametro("@ccnumi", numi))
         _listParam.Add(New Datos.DParametro("@cccod", cod))
         _listParam.Add(New Datos.DParametro("@ccdesc", desc))

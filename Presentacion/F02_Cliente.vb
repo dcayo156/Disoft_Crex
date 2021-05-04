@@ -279,6 +279,11 @@ Public Class F02_Cliente
         tbLongitud.ReadOnly = Not flat
         tbRecorrido.ReadOnly = Not flat
 
+        tbAdicional01.ReadOnly = Not flat
+        tbAdicional02.ReadOnly = Not flat
+        tbAdicional03.ReadOnly = Not flat
+        tbAdicional04.ReadOnly = Not flat
+
         'ComboBox
         CbZona.ReadOnly = Not flat
         CbTipoDoc.ReadOnly = Not flat
@@ -348,6 +353,14 @@ Public Class F02_Cliente
         TbNit.Clear()
         tbLatitud.Clear()
         tbLongitud.Clear()
+
+
+        tbAdicional01.Clear()
+        tbAdicional02.Clear()
+        tbAdicional03.Clear()
+        tbAdicional04.Clear()
+
+
         tbRecorrido.Text = "0"
         TbiCantEntrante.Value = 0
         TbiCantSaliente.Value = 0
@@ -468,6 +481,14 @@ Public Class F02_Cliente
                     Me.DtiFechaNac.Value = .GetValue("fnac")
                     Me.DtiFechaIng.Value = .GetValue("fing")
                     Me.TbDireccion.Text = .GetValue("direc").ToString
+
+                    Me.tbAdicional01.Text = .GetValue("Adicional01").ToString
+                    Me.tbAdicional02.Text = .GetValue("Adicional02").ToString
+                    Me.tbAdicional03.Text = .GetValue("Adicional03").ToString
+                    Me.tbAdicional04.Text = .GetValue("Adicional04").ToString
+
+
+
 
                     If (.GetValue("ultped").ToString.Equals("")) Then
                         Me.DtiUltimoPedido.Value = DtiFechaIng.Value
@@ -824,7 +845,7 @@ Public Class F02_Cliente
                                                        IIf(chbLunes.Checked, 1, 0), IIf(chbMartes.Checked, 1, 0),
                                                        IIf(chbMiercoles.Checked, 1, 0), IIf(chbJueves.Checked, 1, 0),
                                                        IIf(chbViernes.Checked, 1, 0), IIf(chbSabado.Checked, 1, 0),
-                                                       IIf(chbDomingo.Checked, 1, 0))
+                                                       IIf(chbDomingo.Checked, 1, 0), tbAdicional01.Text, tbAdicional02.Text, tbAdicional03.Text, tbAdicional04.Text)
 
 
                 If (res) Then
@@ -928,7 +949,7 @@ Public Class F02_Cliente
                                                           IIf(chbLunes.Checked, 1, 0), IIf(chbMartes.Checked, 1, 0),
                                                           IIf(chbMiercoles.Checked, 1, 0), IIf(chbJueves.Checked, 1, 0),
                                                           IIf(chbViernes.Checked, 1, 0), IIf(chbSabado.Checked, 1, 0),
-                                                          IIf(chbDomingo.Checked, 1, 0))
+                                                          IIf(chbDomingo.Checked, 1, 0), tbAdicional01.Text, tbAdicional02.Text, tbAdicional03.Text, tbAdicional04.Text)
 
                 If (res) Then
 
@@ -3054,7 +3075,10 @@ Public Class F02_Cliente
 
     Private Sub P_prAddFilaProducto()
         Try
-            CType(dgjProducto.DataSource, DataTable).Rows.Add({0, 0, 0, "", 0, -1})
+            If (Not IsNothing(dgjProducto.DataSource)) Then
+                CType(dgjProducto.DataSource, DataTable).Rows.Add({0, 0, 0, "", 0, -1})
+            End If
+
         Catch ex As Exception
 
         End Try
@@ -3133,6 +3157,27 @@ Public Class F02_Cliente
     End Sub
 
     Private Sub StcFrecuencia_SelectedTabChanged(sender As Object, e As SuperTabStripSelectedTabChangedEventArgs) Handles StcFrecuencia.SelectedTabChanged
+
+    End Sub
+
+    Private Sub tbLatitud_TextChanged(sender As Object, e As EventArgs) Handles tbLatitud.TextChanged
+
+    End Sub
+
+    Private Sub BtMarcarPunto_Click(sender As Object, e As EventArgs) Handles BtMarcarPunto.Click
+
+        If (tbLatitud.Text.Length > 4 And tbLongitud.Text.Length > 4) Then
+            Overlay.Markers.Clear()
+            Dim plg As PointLatLng = New PointLatLng(CDbl(tbLatitud.Text), CDbl(tbLongitud.Text))
+            P_prAgregarPunto(plg)
+            SuperTabControlUbicacionGeografica.SelectedTabIndex = 0
+        Else
+            ToastNotification.Show(Me, "Latitud o Longitud Invalido".ToUpper,
+                                          My.Resources.WARNING, InDuracion * 1000,
+                                          eToastGlowColor.Red,
+                                          eToastPosition.TopCenter)
+        End If
+
 
     End Sub
 End Class
