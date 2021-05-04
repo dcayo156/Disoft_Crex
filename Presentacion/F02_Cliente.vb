@@ -149,6 +149,8 @@ Public Class F02_Cliente
         Else
             stiFrecuencia.Visible = False
         End If
+
+        chktodos.Checked = True
     End Sub
     Private Sub _Habilitar()
         GroupPanelEquipos.Visible = gs_Parametros(0).Item("syclienteequipo")
@@ -3179,5 +3181,31 @@ Public Class F02_Cliente
         End If
 
 
+    End Sub
+
+    Private Sub chktodos_CheckedChanged(sender As Object, e As EventArgs) Handles chktodos.CheckedChanged
+        If (chktodos.Checked) Then
+            DgjBusqueda.RootTable.RemoveFilter()
+
+            chkEventuales.Checked = False
+            chkconfirmados.Checked = False
+
+        End If
+    End Sub
+    Private Sub chkEventuales_CheckedChanged(sender As Object, e As EventArgs) Handles chkEventuales.CheckedChanged
+        If (chkEventuales.Checked) Then
+            DgjBusqueda.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(DgjBusqueda.RootTable.Columns("even"), Janus.Windows.GridEX.ConditionOperator.Equal, True))
+            chktodos.Checked = False
+            chkconfirmados.Checked = False
+
+        End If
+    End Sub
+    Private Sub chkconfirmados_CheckedChanged(sender As Object, e As EventArgs) Handles chkconfirmados.CheckedChanged
+        If (chkconfirmados.Checked) Then
+            DgjBusqueda.RootTable.ApplyFilter(New Janus.Windows.GridEX.GridEXFilterCondition(DgjBusqueda.RootTable.Columns("even"), Janus.Windows.GridEX.ConditionOperator.Equal, False))
+            chkEventuales.Checked = False
+            chktodos.Checked = False
+
+        End If
     End Sub
 End Class

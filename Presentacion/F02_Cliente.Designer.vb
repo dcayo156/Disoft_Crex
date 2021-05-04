@@ -52,6 +52,9 @@ Partial Class F02_Cliente
         Me.BtAddEquipo = New DevComponents.DotNetBar.ButtonX()
         Me.TableLayoutPanelDatos = New System.Windows.Forms.TableLayoutPanel()
         Me.StcFrecuencia = New DevComponents.DotNetBar.SuperTabControl()
+        Me.SuperTabControlPanel3 = New DevComponents.DotNetBar.SuperTabControlPanel()
+        Me.DgjSugerencia = New Janus.Windows.GridEX.GridEX()
+        Me.StiFiltroCliente = New DevComponents.DotNetBar.SuperTabItem()
         Me.SuperTabControlPanel8 = New DevComponents.DotNetBar.SuperTabControlPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.tbAdicional04 = New DevComponents.DotNetBar.Controls.TextBoxX()
@@ -97,9 +100,6 @@ Partial Class F02_Cliente
         Me.LabelX11 = New DevComponents.DotNetBar.LabelX()
         Me.SuperTabItemCoordenadas = New DevComponents.DotNetBar.SuperTabItem()
         Me.StiUbicacion = New DevComponents.DotNetBar.SuperTabItem()
-        Me.SuperTabControlPanel3 = New DevComponents.DotNetBar.SuperTabControlPanel()
-        Me.DgjSugerencia = New Janus.Windows.GridEX.GridEX()
-        Me.StiFiltroCliente = New DevComponents.DotNetBar.SuperTabItem()
         Me.GroupPanelDatosGenerales = New DevComponents.DotNetBar.Controls.GroupPanel()
         Me.PnDatosGenerales = New DevComponents.DotNetBar.PanelEx()
         Me.cbTipoCredito = New Janus.Windows.GridEX.EditControls.MultiColumnCombo()
@@ -155,6 +155,11 @@ Partial Class F02_Cliente
         Me.LabelX13 = New DevComponents.DotNetBar.LabelX()
         Me.GroupPanelBusquedaDatos = New DevComponents.DotNetBar.Controls.GroupPanel()
         Me.DgjBusqueda = New Janus.Windows.GridEX.GridEX()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkconfirmados = New System.Windows.Forms.CheckBox()
+        Me.chkEventuales = New System.Windows.Forms.CheckBox()
+        Me.chktodos = New System.Windows.Forms.CheckBox()
         Me.SuperTabItemAcuerdo = New DevComponents.DotNetBar.SuperTabItem()
         Me.SuperTabControlPanel5 = New DevComponents.DotNetBar.SuperTabControlPanel()
         Me.PanelExBaseAcuerdo = New DevComponents.DotNetBar.PanelEx()
@@ -186,11 +191,6 @@ Partial Class F02_Cliente
         Me.ToolStripMenuItemEliminarProducto = New System.Windows.Forms.ToolStripMenuItem()
         Me.btActualizar = New DevComponents.DotNetBar.ButtonX()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.chktodos = New System.Windows.Forms.CheckBox()
-        Me.chkEventuales = New System.Windows.Forms.CheckBox()
-        Me.chkconfirmados = New System.Windows.Forms.CheckBox()
         CType(Me.MSuperTabControlPrincipal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MSuperTabControlPrincipal.SuspendLayout()
         Me.MSuperTabControlPanelBusqueda.SuspendLayout()
@@ -217,6 +217,8 @@ Partial Class F02_Cliente
         Me.TableLayoutPanelDatos.SuspendLayout()
         CType(Me.StcFrecuencia, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.StcFrecuencia.SuspendLayout()
+        Me.SuperTabControlPanel3.SuspendLayout()
+        CType(Me.DgjSugerencia, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuperTabControlPanel8.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.SuperTabControlPanel7.SuspendLayout()
@@ -233,8 +235,6 @@ Partial Class F02_Cliente
         Me.GroupPanelMapa.SuspendLayout()
         Me.SuperTabControlPanel2.SuspendLayout()
         Me.GroupPanelCoordenadas.SuspendLayout()
-        Me.SuperTabControlPanel3.SuspendLayout()
-        CType(Me.DgjSugerencia, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupPanelDatosGenerales.SuspendLayout()
         Me.PnDatosGenerales.SuspendLayout()
         CType(Me.cbTipoCredito, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -252,6 +252,8 @@ Partial Class F02_Cliente
         CType(Me.CbZona, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupPanelBusquedaDatos.SuspendLayout()
         CType(Me.DgjBusqueda, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel2.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuperTabControlPanel5.SuspendLayout()
         Me.PanelExBaseAcuerdo.SuspendLayout()
         Me.GroupPanelProducto.SuspendLayout()
@@ -267,8 +269,6 @@ Partial Class F02_Cliente
         Me.PanelEx1.SuspendLayout()
         CType(Me.dgjDias, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cmsProducto.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MSuperTabControlPrincipal
@@ -753,6 +753,35 @@ Partial Class F02_Cliente
         Me.StcFrecuencia.Tabs.AddRange(New DevComponents.DotNetBar.BaseItem() {Me.StiFiltroCliente, Me.StiUbicacion, Me.catProd, Me.stiFrecuencia, Me.SuperTabItem1})
         Me.StcFrecuencia.TabStyle = DevComponents.DotNetBar.eSuperTabStyle.Office2010BackstageBlue
         Me.StcFrecuencia.Text = "SuperTabControl2"
+        '
+        'SuperTabControlPanel3
+        '
+        Me.SuperTabControlPanel3.Controls.Add(Me.DgjSugerencia)
+        Me.SuperTabControlPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SuperTabControlPanel3.Location = New System.Drawing.Point(0, 26)
+        Me.SuperTabControlPanel3.Margin = New System.Windows.Forms.Padding(4)
+        Me.SuperTabControlPanel3.Name = "SuperTabControlPanel3"
+        Me.SuperTabControlPanel3.Padding = New System.Windows.Forms.Padding(7, 6, 7, 6)
+        Me.SuperTabControlPanel3.Size = New System.Drawing.Size(454, 389)
+        Me.SuperTabControlPanel3.TabIndex = 1
+        Me.SuperTabControlPanel3.TabItem = Me.StiFiltroCliente
+        '
+        'DgjSugerencia
+        '
+        Me.DgjSugerencia.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DgjSugerencia.Location = New System.Drawing.Point(7, 6)
+        Me.DgjSugerencia.Margin = New System.Windows.Forms.Padding(4)
+        Me.DgjSugerencia.Name = "DgjSugerencia"
+        Me.DgjSugerencia.RecordNavigator = True
+        Me.DgjSugerencia.Size = New System.Drawing.Size(440, 377)
+        Me.DgjSugerencia.TabIndex = 0
+        '
+        'StiFiltroCliente
+        '
+        Me.StiFiltroCliente.AttachedControl = Me.SuperTabControlPanel3
+        Me.StiFiltroCliente.GlobalItem = False
+        Me.StiFiltroCliente.Name = "StiFiltroCliente"
+        Me.StiFiltroCliente.Text = "SUGERENCIAS"
         '
         'SuperTabControlPanel8
         '
@@ -1495,35 +1524,6 @@ Partial Class F02_Cliente
         Me.StiUbicacion.GlobalItem = False
         Me.StiUbicacion.Name = "StiUbicacion"
         Me.StiUbicacion.Text = "UBICACIÓN"
-        '
-        'SuperTabControlPanel3
-        '
-        Me.SuperTabControlPanel3.Controls.Add(Me.DgjSugerencia)
-        Me.SuperTabControlPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SuperTabControlPanel3.Location = New System.Drawing.Point(0, 26)
-        Me.SuperTabControlPanel3.Margin = New System.Windows.Forms.Padding(4)
-        Me.SuperTabControlPanel3.Name = "SuperTabControlPanel3"
-        Me.SuperTabControlPanel3.Padding = New System.Windows.Forms.Padding(7, 6, 7, 6)
-        Me.SuperTabControlPanel3.Size = New System.Drawing.Size(454, 389)
-        Me.SuperTabControlPanel3.TabIndex = 1
-        Me.SuperTabControlPanel3.TabItem = Me.StiFiltroCliente
-        '
-        'DgjSugerencia
-        '
-        Me.DgjSugerencia.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DgjSugerencia.Location = New System.Drawing.Point(7, 6)
-        Me.DgjSugerencia.Margin = New System.Windows.Forms.Padding(4)
-        Me.DgjSugerencia.Name = "DgjSugerencia"
-        Me.DgjSugerencia.RecordNavigator = True
-        Me.DgjSugerencia.Size = New System.Drawing.Size(440, 377)
-        Me.DgjSugerencia.TabIndex = 0
-        '
-        'StiFiltroCliente
-        '
-        Me.StiFiltroCliente.AttachedControl = Me.SuperTabControlPanel3
-        Me.StiFiltroCliente.GlobalItem = False
-        Me.StiFiltroCliente.Name = "StiFiltroCliente"
-        Me.StiFiltroCliente.Text = "SUGERENCIAS"
         '
         'GroupPanelDatosGenerales
         '
@@ -2625,6 +2625,57 @@ Partial Class F02_Cliente
         Me.DgjBusqueda.TotalRow = Janus.Windows.GridEX.InheritableBoolean.[True]
         Me.DgjBusqueda.UseGroupRowSelector = True
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.GroupBox1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(7, 6)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(1470, 72)
+        Me.Panel2.TabIndex = 1
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.chkconfirmados)
+        Me.GroupBox1.Controls.Add(Me.chkEventuales)
+        Me.GroupBox1.Controls.Add(Me.chktodos)
+        Me.GroupBox1.Location = New System.Drawing.Point(991, 3)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(445, 62)
+        Me.GroupBox1.TabIndex = 0
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Filtros"
+        '
+        'chkconfirmados
+        '
+        Me.chkconfirmados.AutoSize = True
+        Me.chkconfirmados.Location = New System.Drawing.Point(255, 25)
+        Me.chkconfirmados.Name = "chkconfirmados"
+        Me.chkconfirmados.Size = New System.Drawing.Size(126, 24)
+        Me.chkconfirmados.TabIndex = 2
+        Me.chkconfirmados.Text = "Confirmados"
+        Me.chkconfirmados.UseVisualStyleBackColor = True
+        '
+        'chkEventuales
+        '
+        Me.chkEventuales.AutoSize = True
+        Me.chkEventuales.Location = New System.Drawing.Point(125, 25)
+        Me.chkEventuales.Name = "chkEventuales"
+        Me.chkEventuales.Size = New System.Drawing.Size(113, 24)
+        Me.chkEventuales.TabIndex = 1
+        Me.chkEventuales.Text = "Eventuales"
+        Me.chkEventuales.UseVisualStyleBackColor = True
+        '
+        'chktodos
+        '
+        Me.chktodos.AutoSize = True
+        Me.chktodos.Location = New System.Drawing.Point(22, 26)
+        Me.chktodos.Name = "chktodos"
+        Me.chktodos.Size = New System.Drawing.Size(77, 24)
+        Me.chktodos.TabIndex = 0
+        Me.chktodos.Text = "Todos"
+        Me.chktodos.UseVisualStyleBackColor = True
+        '
         'SuperTabItemAcuerdo
         '
         Me.SuperTabItemAcuerdo.AttachedControl = Me.SuperTabControlPanel5
@@ -3211,57 +3262,6 @@ Partial Class F02_Cliente
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 500
         '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.GroupBox1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(7, 6)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1470, 72)
-        Me.Panel2.TabIndex = 1
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.chkconfirmados)
-        Me.GroupBox1.Controls.Add(Me.chkEventuales)
-        Me.GroupBox1.Controls.Add(Me.chktodos)
-        Me.GroupBox1.Location = New System.Drawing.Point(991, 3)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(445, 62)
-        Me.GroupBox1.TabIndex = 0
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Filtros"
-        '
-        'chktodos
-        '
-        Me.chktodos.AutoSize = True
-        Me.chktodos.Location = New System.Drawing.Point(22, 26)
-        Me.chktodos.Name = "chktodos"
-        Me.chktodos.Size = New System.Drawing.Size(77, 24)
-        Me.chktodos.TabIndex = 0
-        Me.chktodos.Text = "Todos"
-        Me.chktodos.UseVisualStyleBackColor = True
-        '
-        'chkEventuales
-        '
-        Me.chkEventuales.AutoSize = True
-        Me.chkEventuales.Location = New System.Drawing.Point(125, 25)
-        Me.chkEventuales.Name = "chkEventuales"
-        Me.chkEventuales.Size = New System.Drawing.Size(113, 24)
-        Me.chkEventuales.TabIndex = 1
-        Me.chkEventuales.Text = "Eventuales"
-        Me.chkEventuales.UseVisualStyleBackColor = True
-        '
-        'chkconfirmados
-        '
-        Me.chkconfirmados.AutoSize = True
-        Me.chkconfirmados.Location = New System.Drawing.Point(255, 25)
-        Me.chkconfirmados.Name = "chkconfirmados"
-        Me.chkconfirmados.Size = New System.Drawing.Size(126, 24)
-        Me.chkconfirmados.TabIndex = 2
-        Me.chkconfirmados.Text = "Confirmados"
-        Me.chkconfirmados.UseVisualStyleBackColor = True
-        '
         'F02_Cliente
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -3304,6 +3304,8 @@ Partial Class F02_Cliente
         Me.TableLayoutPanelDatos.ResumeLayout(False)
         CType(Me.StcFrecuencia, System.ComponentModel.ISupportInitialize).EndInit()
         Me.StcFrecuencia.ResumeLayout(False)
+        Me.SuperTabControlPanel3.ResumeLayout(False)
+        CType(Me.DgjSugerencia, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SuperTabControlPanel8.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
@@ -3321,8 +3323,6 @@ Partial Class F02_Cliente
         Me.GroupPanelMapa.ResumeLayout(False)
         Me.SuperTabControlPanel2.ResumeLayout(False)
         Me.GroupPanelCoordenadas.ResumeLayout(False)
-        Me.SuperTabControlPanel3.ResumeLayout(False)
-        CType(Me.DgjSugerencia, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupPanelDatosGenerales.ResumeLayout(False)
         Me.PnDatosGenerales.ResumeLayout(False)
         Me.PnDatosGenerales.PerformLayout()
@@ -3343,6 +3343,9 @@ Partial Class F02_Cliente
         CType(Me.CbZona, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupPanelBusquedaDatos.ResumeLayout(False)
         CType(Me.DgjBusqueda, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel2.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.SuperTabControlPanel5.ResumeLayout(False)
         Me.PanelExBaseAcuerdo.ResumeLayout(False)
         Me.GroupPanelProducto.ResumeLayout(False)
@@ -3359,9 +3362,6 @@ Partial Class F02_Cliente
         Me.PanelEx1.ResumeLayout(False)
         CType(Me.dgjDias, System.ComponentModel.ISupportInitialize).EndInit()
         Me.cmsProducto.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

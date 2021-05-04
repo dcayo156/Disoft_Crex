@@ -2317,56 +2317,65 @@ Public Class F02_PedidoNuevo
     Private Sub JGr_Clientes_KeyDown(sender As Object, e As KeyEventArgs) Handles JGr_Clientes.KeyDown
 
         If e.KeyData = Keys.Enter And JGr_Clientes.Row >= 0 Then
-            Tb_CliCod.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliId").Value)
-            Tb_CliNombre.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliNombre").Value)
-            Tb_CliDireccion.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliDireccion").Value)
-            Tb_CliTelef.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliTelefono2").Value)
-            Tb_CliCodZona.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliCodZona").Value)
-            Tb_Zona.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliZona").Value)
-            Tb_CliCateg.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliCateg").Value)
-            Tb_CliEstado.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("ccest").Value)
-            tbCodCliente.Text = JGr_Clientes.CurrentRow.Cells("codCliente").Value.ToString
 
-            Dim codZona As String = JGr_Clientes.CurrentRow.Cells("CliCodZona").Value.ToString
-            Dim dtDist As DataTable = L_fnObtenerTabla("a.lanumi, c.cbnumi, c.cbdesc",
+            If (JGr_Clientes.CurrentRow.Cells("cceven").Value = 0) Then
+
+                Tb_CliCod.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliId").Value)
+                Tb_CliNombre.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliNombre").Value)
+                Tb_CliDireccion.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliDireccion").Value)
+                Tb_CliTelef.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliTelefono2").Value)
+                Tb_CliCodZona.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliCodZona").Value)
+                Tb_Zona.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliZona").Value)
+                Tb_CliCateg.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("CliCateg").Value)
+                Tb_CliEstado.Text = Convert.ToString(JGr_Clientes.CurrentRow.Cells("ccest").Value)
+                tbCodCliente.Text = JGr_Clientes.CurrentRow.Cells("codCliente").Value.ToString
+
+                Dim codZona As String = JGr_Clientes.CurrentRow.Cells("CliCodZona").Value.ToString
+                Dim dtDist As DataTable = L_fnObtenerTabla("a.lanumi, c.cbnumi, c.cbdesc",
                                                        "TL001 a inner join TL0012 b on a.lanumi=b.lcnumi inner join TC002 c on b.lccbnumi=c.cbnumi",
                                                        "c.cbcat=1")
-            Dim dtPreV As DataTable = L_fnObtenerTabla("a.lanumi, c.cbnumi, c.cbdesc",
+                Dim dtPreV As DataTable = L_fnObtenerTabla("a.lanumi, c.cbnumi, c.cbdesc",
                                                        "TL001 a inner join TL0012 b on a.lanumi=b.lcnumi inner join TC002 c on b.lccbnumi=c.cbnumi",
                                                        "c.cbcat=3")
-            Dim dr As DataRow()
-            If (dtDist.Rows.Count > 0) Then
-                dr = dtDist.Select("lanumi=" + codZona)
-                If (dr.Count > 0) Then
-                    cbDistribuidor.Clear()
-                    cbDistribuidor.SelectedText = dr(0).Item("cbdesc").ToString
-                Else
-                    cbDistribuidor.Clear()
-                    cbDistribuidor.SelectedText = ""
+                Dim dr As DataRow()
+                If (dtDist.Rows.Count > 0) Then
+                    dr = dtDist.Select("lanumi=" + codZona)
+                    If (dr.Count > 0) Then
+                        cbDistribuidor.Clear()
+                        cbDistribuidor.SelectedText = dr(0).Item("cbdesc").ToString
+                    Else
+                        cbDistribuidor.Clear()
+                        cbDistribuidor.SelectedText = ""
+                    End If
                 End If
+
+                If (dtPreV.Rows.Count > 0) Then
+                    dr = dtPreV.Select("lanumi=" + codZona)
+                    If (dr.Count > 0) Then
+                        cbPreVendedor.Clear()
+                        cbPreVendedor.SelectedText = dr(0).Item("cbdesc").ToString
+                    Else
+                        cbPreVendedor.Clear()
+                        cbPreVendedor.SelectedText = ""
+                    End If
+                End If
+
+                'poner el foco en tipo de producto
+                MSuperTabControlPrincipal.SelectedTabIndex = 0
+                JGr_TipoProd.Focus()
+                JGr_TipoProd.Row = 0
+
+                ''Carga los productos
+                _PCargarGridProductosNuevo(Tb_CliCateg.Text)
+                JGr_Productos.Focus()
+                JGr_Productos.MoveTo(JGr_Productos.FilterRow)
+                JGr_Productos.Col = 1
+
+            Else
+                Dim img As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                ToastNotification.Show(Me, "El Cliente es Eventual. Debe Confirmar al cliente para poder realizar pedidos".ToUpper, img, 3500, eToastGlowColor.Red, eToastPosition.BottomCenter)
             End If
 
-            If (dtPreV.Rows.Count > 0) Then
-                dr = dtPreV.Select("lanumi=" + codZona)
-                If (dr.Count > 0) Then
-                    cbPreVendedor.Clear()
-                    cbPreVendedor.SelectedText = dr(0).Item("cbdesc").ToString
-                Else
-                    cbPreVendedor.Clear()
-                    cbPreVendedor.SelectedText = ""
-                End If
-            End If
-
-            'poner el foco en tipo de producto
-            MSuperTabControlPrincipal.SelectedTabIndex = 0
-            JGr_TipoProd.Focus()
-            JGr_TipoProd.Row = 0
-
-            ''Carga los productos
-            _PCargarGridProductosNuevo(Tb_CliCateg.Text)
-            JGr_Productos.Focus()
-            JGr_Productos.MoveTo(JGr_Productos.FilterRow)
-            JGr_Productos.Col = 1
         End If
 
     End Sub
@@ -2396,9 +2405,9 @@ Public Class F02_PedidoNuevo
 
             ''Validación para que solo pueda ingresar 20 productos
             If JGr_DetallePedido.RowCount < 20 Then
-                If JGr_Productos.CurrentRow.Cells("iacant").Value > 0 Then
+                'If JGr_Productos.CurrentRow.Cells("iacant").Value > 0 Then
 
-                    If (Not existe) Then
+                If (Not existe) Then
                         'agregar al detalle producto seleccionado
                         Dim codProd, codProd1, descrip, precio, familia, atributo, stock As String
 
@@ -2433,10 +2442,8 @@ Public Class F02_PedidoNuevo
                             ToastNotification.Show(Me, "El producto ya existe en el detalle, favor modificar la cantidad".ToUpper, img, 3500, eToastGlowColor.Red, eToastPosition.BottomCenter)
                         End If
                     End If
+
                 Else
-                    ToastNotification.Show(Me, "El producto no tiene Stock Disponible".ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.BottomCenter)
-                End If
-            Else
                 ToastNotification.Show(Me, "Solo puede ingresar 20 productos".ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.BottomCenter)
             End If
 
@@ -2827,16 +2834,16 @@ Public Class F02_PedidoNuevo
             stock = JGr_DetallePedido.CurrentRow.Cells("Stock").Value
             atributo = JGr_DetallePedido.CurrentRow.Cells("Atributo").Value
 
-            If Tb_CantProd.Text > stock And stock <> -9999 Then
-                ToastNotification.Show(Me, "La cantidad del pedido no debe ser mayor al del stock" & vbCrLf &
-                            "Stock=" + Str(stock).ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.BottomCenter)
-                Modelo.MGlobal.gs_MBanderaEnter = False
-                'poner el foco en cantidad
-                Tb_CantProd.Text = "1"
-                Tb_CantProd.SelectAll()
+            'If Tb_CantProd.Text > stock And stock <> -9999 Then
+            '    ToastNotification.Show(Me, "La cantidad del pedido no debe ser mayor al del stock" & vbCrLf &
+            '                "Stock=" + Str(stock).ToUpper, My.Resources.WARNING, 5500, eToastGlowColor.Green, eToastPosition.BottomCenter)
+            '    Modelo.MGlobal.gs_MBanderaEnter = False
+            '    'poner el foco en cantidad
+            '    Tb_CantProd.Text = "1"
+            '    Tb_CantProd.SelectAll()
 
-            Else
-                Modelo.MGlobal.gs_MBanderaEnter = True
+            'Else
+            Modelo.MGlobal.gs_MBanderaEnter = True
                 If atributo = -1 Then
                     CType(JGr_DetallePedido.DataSource, DataTable).Rows(pos).Item("obpcant") = Tb_CantProd.Text
                     CType(JGr_DetallePedido.DataSource, DataTable).Rows(pos).Item("obptot") = CDbl(1) * precio
@@ -2853,8 +2860,8 @@ Public Class F02_PedidoNuevo
                     JGr_Productos.Col = -1
                     'Tb_Observaciones.Focus()
                 End If
+                'End If
             End If
-        End If
     End Sub
 
     Private Sub Tb_CantProd_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Tb_CantProd.KeyPress
