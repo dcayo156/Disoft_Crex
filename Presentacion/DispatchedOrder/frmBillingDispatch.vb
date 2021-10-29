@@ -879,7 +879,7 @@ Public Class frmBillingDispatch
             .Caption = "Nro. Factura"
             .Width = 80
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
-            .Visible = False
+            .Visible = True
             .Position = 6
         End With
         With dgjPedido.RootTable.Columns("nombreZona")
@@ -1210,6 +1210,7 @@ Public Class frmBillingDispatch
                 If L_YaSeGraboTV001(pedidoId) = False Then
                     GrabarTV001(pedidoId.ToString())
                 End If
+
                 'Verifica si existe productos para facturar
                 If New LPedido().
                     VerfiicarDetallePedidoEsParaFacturar(
@@ -1218,16 +1219,31 @@ Public Class frmBillingDispatch
                     'Productos para dosificacion uno
                     If New LPedido().VerfiicarDetallePedidoXTipoDosificacion(pedidoId, dosificaionUno) Then
 
+                        'Dim fecha As String = Now.Date
+                        'Dim dtDosificacion As DataSet = L_Dosificacion2(dosificaionUno, "1", fecha)
+                        'If dtDosificacion.Tables(0).Rows.Count = 0 Then
+                        '    Dim img1 As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                        '    ToastNotification.Show(Me, "La Dosificación para la Compañía: ".ToUpper + dosificaionUno.ToString + " ya caducó, ingrese nueva dosificación".ToUpper, img1, 4000, eToastGlowColor.Red, eToastPosition.TopCenter)
+                        '    Exit Sub
+                        'End If
+
                         dtDetalle = L_prObtenerDetallePedidoFactura(pedidoId.ToString())
                         IntroducirFactura(dtDetalle)
                     End If
                     'Productos para dosificacion dos
                     If New LPedido().VerfiicarDetallePedidoXTipoDosificacion(pedidoId, dosificaionDos) Then
-
+                        'Dim fecha As String = Now.Date
+                        'Dim dtDosificacion As DataSet = L_Dosificacion2(dosificaionDos, "1", fecha)
+                        'If dtDosificacion.Tables(0).Rows.Count = 0 Then
+                        '    Dim img1 As Bitmap = New Bitmap(My.Resources.Mensaje, 50, 50)
+                        '    ToastNotification.Show(Me, "La Dosificación para la Compañía: ".ToUpper + dosificaionDos.ToString + " ya caducó, ingrese nueva dosificación".ToUpper, img1, 4000, eToastGlowColor.Red, eToastPosition.TopCenter)
+                        '    Exit Sub
+                        'End If
                         dtDetalle = L_prObtenerDetallePedidoFacturaDosificaionDos(pedidoId.ToString())
                         IntroducirFactura(dtDetalle)
                     End If
                 End If
+
             Next
 
             Dim img As Bitmap = New Bitmap(My.Resources.checked, 50, 50)

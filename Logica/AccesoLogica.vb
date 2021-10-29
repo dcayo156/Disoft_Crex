@@ -10587,7 +10587,20 @@ Public Class AccesoLogica
         Dim _Ds As New DataSet
         Dim _Where As String
         _fecha = Now.Date.ToString("yyyy/MM/dd")
-        _Where = " yealm = " + _alm + " AND yefdel <= '" + _fecha + "' AND yefal >= '" + _fecha + "' AND yeap = 1"
+        _Where = "yealm = " + _alm + " AND yefdel <= '" + _fecha + "' AND yefal >= '" + _fecha + "' AND yeap = 1"
+
+        _Tabla = D_Datos_Tabla("*", "TS002", _Where)
+        _Ds.Tables.Add(_Tabla)
+        Return _Ds
+    End Function
+
+
+    Public Shared Function L_Dosificacion2(_cia As String, _alm As String, _fecha As String) As DataSet
+        Dim _Tabla As DataTable
+        Dim _Ds As New DataSet
+        Dim _Where As String
+        _fecha = Now.Date.ToString("yyyy/MM/dd")
+        _Where = "yecia = " + _cia + " AND yealm = " + _alm + " AND yefdel <= '" + _fecha + "' AND yefal >= '" + _fecha + "' AND yeap = 1"
 
         _Tabla = D_Datos_Tabla("*", "TS002", _Where)
         _Ds.Tables.Add(_Tabla)

@@ -27,16 +27,19 @@ Public Class FacturaPrint
             P_Global.Visualizador.Close()
         End If
 
-        _Fecha = Now.Date.ToString("dd/MM/yyyy")
-        _Hora = Now.Hour.ToString + ":" + Now.Minute.ToString
-        _Ds1 = L_Dosificacion("1", "1", _Fecha)
-
-        'Dim totalFacturas As DataTable = L_ObtenerFacturas(numi)
-        'For Each fila As DataRow In totalFacturas.Rows
 
         Dim tipoDosificacion = L_ObtenerTipoDosificaionXPedido(facturaId, numi)
         '_Ds = L_Reporte_Factura(fila("fvanumi"), fila("fvanumi2"), tipoDosificacion)
         _Ds = L_Reporte_Factura(facturaId, numi, tipoDosificacion)
+
+        If esReImprimirFactura Then
+            _Fecha = _Ds.Tables(0).Rows(0).Item("fvafec").ToString
+        Else
+            _Fecha = Now.Date.ToString("dd/MM/yyyy")
+        End If
+
+        _Hora = Now.Hour.ToString + ":" + Now.Minute.ToString
+        _Ds1 = L_Dosificacion("1", "1", _Fecha)
 
         _Autorizacion = _Ds1.Tables(0).Rows(tipoDosificacion).Item("yeautoriz").ToString
         _NumFac = CInt(_Ds1.Tables(0).Rows(tipoDosificacion).Item("yenunf")) + 1
@@ -67,7 +70,7 @@ Public Class FacturaPrint
 
         'Dim li As String = Facturacion.ConvertirLiteral.A_fnConvertirLiteral(CDbl(_Total) - CDbl(_TotalDecimal)) + " con " + IIf(_TotalDecimal2.Equals("0"), "00", _TotalDecimal2) + "/100 Bolivianos"
         _Literal = Facturacion.ConvertirLiteral.A_fnConvertirLiteral(CDbl(_TotalLi) - CDbl(_TotalDecimal)) + " con " + IIf(_TotalDecimal2.Equals("0"), "00", _TotalDecimal2) + "/100 Bolivianos"
-        _Ds2 = L_Reporte_Factura_Cia("1")
+        _Ds2 = L_Reporte_Factura_Cia(IIf(tipoDosificacion = 0, "1", "2"))
         QrControl.Text = _Ds2.Tables(0).Rows(0).Item("scnit").ToString + "|" + Str(_NumFac).Trim + "|" + _Autorizacion + "|" + _Fecha + "|" + _Total + "|" + _TotalLi.ToString + "|" + _Cod_Control + "|" + nit + "|" + ice.ToString + "|0|0|" + Str(_Desc).Trim
 
         ModificarFactura(numi, _FechaAl, _Autorizacion, _Cod_Control, _NumFac)
@@ -75,7 +78,7 @@ Public Class FacturaPrint
         updateTO001C(numi, Str(_NumFac))
         '_Ds = L_Reporte_Factura(numi, numi, 0)
 
-        _Ds3 = L_ObtenerRutaImpresora("1") ' Datos de Impresion de Facturación
+        _Ds3 = L_ObtenerRutaImpresora( "1") ' Datos de Impresion de Facturación
 
         For I = 0 To _Ds.Tables(0).Rows.Count - 1
             _Ds.Tables(0).Rows(I).Item("fvaimgqr") = P_fnImageToByteArray(QrControl.Image)
