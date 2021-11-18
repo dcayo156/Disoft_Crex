@@ -2333,6 +2333,8 @@
     <None Include="Resources\icons8_In_Transit_50px_3.png" />
     <None Include="Resources\icons8_In_Transit_100px.png" />
     <None Include="Resources\icons8_In_Transit_80px.png" />
+    <None Include="Resources\ExportarExcel.PNG" />
+    <None Include="Resources\ImportarExcel.PNG" />
     <Content Include="SqlServerTypes\Loader.cs" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">

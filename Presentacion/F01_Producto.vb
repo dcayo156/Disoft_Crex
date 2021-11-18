@@ -4,6 +4,12 @@ Imports DevComponents.DotNetBar.Controls
 Imports Janus.Windows.GridEX
 Imports Logica.AccesoLogica
 Imports UTILITIES
+Imports System.Data.OleDb
+Imports System.Data
+Imports Microsoft.Office.Interop
+Imports Microsoft.VisualBasic
+Imports System
+'Imports Microsoft.Office.Interop.Excel
 
 Public Class F01_Producto
     Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
@@ -19,7 +25,7 @@ Public Class F01_Producto
     Public _tab As SuperTabItem
     Public _modulo As SideNavItem
     Public Limpiar As Boolean = False  'Bandera para indicar si limpiar todos los datos o mantener datos ya registrados
-
+    Dim ProductosImport As New DataTable
 
 #End Region
 
@@ -1310,6 +1316,9 @@ Public Class F01_Producto
         With DgjBusqueda.RootTable.Columns(30)
             .Visible = False
         End With
+        With DgjBusqueda.RootTable.Columns(31)
+            .Visible = False
+        End With
         'Habilitar Filtradores
         With DgjBusqueda
             .GroupByBoxVisible = False
@@ -1806,5 +1815,220 @@ Public Class F01_Producto
                                eToastPosition.TopCenter)
     End Sub
 
+    Private Sub btExcel_Click(sender As Object, e As EventArgs) Handles btExcel.Click
+        _prCrearCarpetaReportes()
+        Dim img As Bitmap = New Bitmap(My.Resources.checked, 50, 50)
+        If (P_ExportarExcel(gs_CarpetaRaiz + "\Reporte\Reporte Productos")) Then
+            ToastNotification.Show(Me, "EXPORTACIÓN DE LISTA DE PRODUCTOS EXITOSA..!!!",
+                                       img, 2000,
+                                       eToastGlowColor.Green,
+                                       eToastPosition.TopCenter)
+        Else
+            ToastNotification.Show(Me, "FALLÓ AL EXPORTACIÓN DE LISTA DE PRODUCTOS..!!!",
+                                       My.Resources.WARNING, 2000,
+                                       eToastGlowColor.Red,
+                                       eToastPosition.TopCenter)
+        End If
+    End Sub
+    Private Sub _prCrearCarpetaReportes()
+        Dim rutaDestino As String = gs_CarpetaRaiz + "\Reporte\Reporte Productos\"
+
+        If System.IO.Directory.Exists(gs_CarpetaRaiz + "\Reporte\Reporte Productos\") = False Then
+            If System.IO.Directory.Exists(gs_CarpetaRaiz + "\Reporte") = False Then
+                System.IO.Directory.CreateDirectory(gs_CarpetaRaiz + "\Reporte")
+                If System.IO.Directory.Exists(gs_CarpetaRaiz + "\Reporte\Reporte Productos") = False Then
+                    System.IO.Directory.CreateDirectory(gs_CarpetaRaiz + "\Reporte\Reporte Productos")
+                End If
+            Else
+                If System.IO.Directory.Exists(gs_CarpetaRaiz + "\Reporte\Reporte Productos") = False Then
+                    System.IO.Directory.CreateDirectory(gs_CarpetaRaiz + "\Reporte\Reporte Productos")
+
+                End If
+            End If
+        End If
+    End Sub
+    Public Function P_ExportarExcel(_ruta As String) As Boolean
+        Dim _ubicacion As String
+        Dim dtProductos As DataTable = L_fnExportarProductos()
+
+        If (1 = 1) Then
+            _ubicacion = _ruta
+            Try
+                Dim _stream As Stream
+                Dim _escritor As StreamWriter
+                Dim _fila As Integer = 0
+                Dim _columna As Integer = 0
+                Dim _archivo As String = _ubicacion & "\ListaDeProductos_" & Now.Date.Day &
+                    "." & Now.Date.Month & "." & Now.Date.Year & "_" & Now.Hour & "." & Now.Minute & "." & Now.Second & ".csv"
+                Dim _linea As String = ""
+                Dim _filadata = 0, columndata As Int32 = 0
+                File.Delete(_archivo)
+                _stream = File.OpenWrite(_archivo)
+                _escritor = New StreamWriter(_stream, System.Text.Encoding.UTF8)
+
+                For Each _col As System.Data.DataColumn In dtProductos.Columns
+                    _linea = _linea & _col.ColumnName & ";"
+                Next
+                _linea = Mid(CStr(_linea), 1, _linea.Length - 1)
+                _escritor.WriteLine(_linea)
+                _linea = Nothing
+
+                For Each _fil As System.Data.DataRow In dtProductos.Rows
+                    For Each _col As System.Data.DataColumn In dtProductos.Columns
+                        Dim data As String = CStr(_fil(_col.ColumnName).ToString)
+                        data = data.Replace(";", ",")
+                        _linea = _linea & data & ";"
+                    Next
+                    _linea = Mid(CStr(_linea), 1, _linea.Length - 1)
+                    _escritor.WriteLine(_linea)
+                    _linea = Nothing
+                Next
+                _escritor.Close()
+
+                Try
+                    Dim ef = New Efecto
+                    ef._archivo = _archivo
+
+                    ef.tipo = 1
+                    ef.Context = "Su archivo ha sido Guardado en la ruta: " + _archivo + vbLf + "DESEA ABRIR EL ARCHIVO?"
+                    ef.Header = "PREGUNTA"
+                    ef.ShowDialog()
+                    Dim bandera As Boolean = False
+                    bandera = ef.band
+                    If (bandera = True) Then
+                        Process.Start(_archivo)
+                    End If
+
+                    'If (MessageBox.Show("Su archivo ha sido Guardado en la ruta: " + _archivo + vbLf + "DESEA ABRIR EL ARCHIVO?", "PREGUNTA", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes) Then
+                    '    Process.Start(_archivo)
+                    'End If
+                    Return True
+                Catch ex As Exception
+                    MsgBox(ex.Message)
+                    Return False
+                End Try
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                Return False
+            End Try
+        End If
+        Return False
+    End Function
+
+    Private Sub btImportar_Click(sender As Object, e As EventArgs) Handles btImportar.Click
+
+        ProductosImport.Clear()
+        MP_ImportarExcel()
+        MP_ImportarDatos()
+    End Sub
+    Private Sub MP_ImportarExcel()
+        Try
+            Dim folder As String = ""
+            Dim doc As String = ""
+            Dim openfile1 As OpenFileDialog = New OpenFileDialog()
+
+            If openfile1.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+                folder = openfile1.FileName
+
+                'Obtener el nombre de la Hoja
+                Dim xl As New Excel.Application
+                Dim xlw As Excel.Workbook
+                Dim xlsheet As Excel.Worksheet
+
+                xlw = xl.Workbooks.Open(folder)
+                xlsheet = CType(xlw.Worksheets.Item(1), Excel.Worksheet)
+                doc = xlsheet.Name
+            End If
+
+            If True Then
+                Dim pathconn As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & folder & ";Extended Properties='Excel 12.0 Xml;HDR=Yes'"
+                'Dim pathconn As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & folder & ";"
+                'Dim pathconn As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & folder & ";Extended Properties=""Excel 8.0;HDR=YES;"""
+
+                Dim con As OleDbConnection = New OleDbConnection(pathconn)
+                Dim MyDataAdapter As OleDbDataAdapter = New OleDbDataAdapter("Select * from [" & doc & "$]", con)
+                con.Open()
+
+                MyDataAdapter.Fill(ProductosImport)
+                con.Close()
+
+            End If
+
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+    End Sub
+    Private Sub MP_ImportarDatos()
+        Try
+            Dim TablaProductos As DataTable = L_fnExportarProductos()
+            Dim ProdFiltrado As DataTable
+            Dim Numi As String
+            Dim Tablaaux As DataTable = ProductosImport.Copy
+            Dim CantProdImp As Integer
+            Dim CantProdTabla As Integer
+
+            '''Validación para comprobar que no existan dos o mas filas con el mismo codigo
+            'For k = 0 To ProductosImport.Rows.Count - 1
+            '    Dim aux = Tablaaux.Select("Codigo=" + ProductosImport.Rows(k).Item("Codigo").ToString)
+            '    If aux.Length > 1 Then
+            '        ToastNotification.Show(Me, "No se puede realizar la importación porque el codigo:  ".ToUpper & ProductosImport.Rows(k).Item("Codigo").ToString & " existe  ".ToUpper & aux.Length.ToString & " veces en la lista".ToUpper,
+            '                               My.Resources.WARNING, 5000, eToastGlowColor.Green, eToastPosition.BottomCenter)
+            '        Exit Sub
+            '    End If
+            'Next
+
+            CantProdImp = ProductosImport.Rows.Count
+            CantProdTabla = TablaProductos.Rows.Count
+            If ProductosImport.Rows.Count > TablaProductos.Rows.Count Then
+                ''Hago una copia para ir cambiando el codigo flex por el codigo del sistema
+                Dim ProductosNuevos As DataTable = ProductosImport.Copy
+                ProductosNuevos.Clear()
+
+                Dim dr As DataRow = ProductosImport.NewRow
+                For i = CantProdTabla To ProductosImport.Rows.Count - 1
+
+                    dr = ProductosImport.Rows(i)
+                    ProductosNuevos.Rows.Add(dr.ItemArray)
+                    Dim importar As Boolean = L_fnImportarProductos(ProductosNuevos)
+
+                    If importar = False Then
+                        ToastNotification.Show(Me, "FALLÓ LA IMPORTACIÓN DEL PRODUCTO:" + ProductosImport.Rows(i).Item("Nombre").ToString,
+                                      My.Resources.WARNING, 2000,
+                                      eToastGlowColor.Red,
+                                      eToastPosition.BottomCenter)
+                        Exit Sub
+                    End If
+                    ProductosNuevos.Clear()
+                Next
+
+                P_prArmarGrillaBusqueda()
+                ToastNotification.Show(Me, "IMPORTACIÓN DE LOS PRODUCTOS EXITOSA!!! ",
+                                  My.Resources.OK, 5000,
+                                  eToastGlowColor.Green,
+                                  eToastPosition.BottomCenter)
+
+                'Dim importar As Boolean = L_fnImportarProductos(ProductosNuevos)
+                'If importar Then
+                '    ToastNotification.Show(Me, "IMPORTACIÓN DE LOS PRODUCTOS EXITOSA!!! ",
+                '                  My.Resources.OK, 5000,
+                '                  eToastGlowColor.Green,
+                '                  eToastPosition.BottomCenter)
+                'Else
+                '    ToastNotification.Show(Me, "FALLÓ LA IMPORTACIÓN DE LOS PRODUCTOS!!!",
+                '                  My.Resources.WARNING, 4000,
+                '                  eToastGlowColor.Red,
+                '                  eToastPosition.BottomCenter)
+                'End If
+            Else
+                ToastNotification.Show(Me, "No se puede realizar la importación porque la cantidad de Productos importados tiene que ser mayor a la cantidad de Productos del sistema".ToUpper,
+                                       My.Resources.WARNING, 5000, eToastGlowColor.Green, eToastPosition.BottomCenter)
+                Exit Sub
+            End If
+
+
+        Catch ex As Exception
+            MostrarMensajeError(ex.Message)
+        End Try
+    End Sub
 #End Region
 End Class

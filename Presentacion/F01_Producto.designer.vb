@@ -114,6 +114,8 @@ Partial Class F01_Producto
         Me.CmDetalle = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.QuitarProductoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.btExcel = New DevComponents.DotNetBar.ButtonX()
+        Me.btImportar = New DevComponents.DotNetBar.ButtonX()
         CType(Me.MSuperTabControlPrincipal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MSuperTabControlPrincipal.SuspendLayout()
         Me.MSuperTabControlPanelRegistro.SuspendLayout()
@@ -178,21 +180,21 @@ Partial Class F01_Producto
         Me.MSuperTabControlPrincipal.ControlBox.MenuBox.Name = ""
         Me.MSuperTabControlPrincipal.ControlBox.Name = ""
         Me.MSuperTabControlPrincipal.ControlBox.SubItems.AddRange(New DevComponents.DotNetBar.BaseItem() {Me.MSuperTabControlPrincipal.ControlBox.MenuBox, Me.MSuperTabControlPrincipal.ControlBox.CloseBox})
-        Me.MSuperTabControlPrincipal.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MSuperTabControlPrincipal.Margin = New System.Windows.Forms.Padding(4)
         Me.MSuperTabControlPrincipal.Size = New System.Drawing.Size(1240, 503)
         Me.MSuperTabControlPrincipal.Controls.SetChildIndex(Me.MSuperTabControlPanelRegistro, 0)
         '
         'MSuperTabControlPanelRegistro
         '
         Me.MSuperTabControlPanelRegistro.Controls.Add(Me.TableLayoutPanelPrincipal)
-        Me.MSuperTabControlPanelRegistro.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MSuperTabControlPanelRegistro.Margin = New System.Windows.Forms.Padding(4)
         Me.MSuperTabControlPanelRegistro.Size = New System.Drawing.Size(1198, 503)
         Me.MSuperTabControlPanelRegistro.Controls.SetChildIndex(Me.MPnUsuario, 0)
         Me.MSuperTabControlPanelRegistro.Controls.SetChildIndex(Me.TableLayoutPanelPrincipal, 0)
         '
         'MPnSuperior
         '
-        Me.MPnSuperior.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MPnSuperior.Margin = New System.Windows.Forms.Padding(4)
         Me.MPnSuperior.Size = New System.Drawing.Size(1240, 70)
         Me.MPnSuperior.Style.Alignment = System.Drawing.StringAlignment.Center
         Me.MPnSuperior.Style.BackColor1.Color = System.Drawing.Color.Gray
@@ -205,7 +207,7 @@ Partial Class F01_Producto
         'MPnInferior
         '
         Me.MPnInferior.Location = New System.Drawing.Point(0, 573)
-        Me.MPnInferior.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MPnInferior.Margin = New System.Windows.Forms.Padding(4)
         Me.MPnInferior.Size = New System.Drawing.Size(1240, 36)
         Me.MPnInferior.Style.Alignment = System.Drawing.StringAlignment.Center
         Me.MPnInferior.Style.BackColor1.Color = System.Drawing.Color.Gray
@@ -218,11 +220,11 @@ Partial Class F01_Producto
         'MPanelToolBarUsuario
         '
         Me.MPanelToolBarUsuario.Location = New System.Drawing.Point(1040, 0)
-        Me.MPanelToolBarUsuario.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MPanelToolBarUsuario.Margin = New System.Windows.Forms.Padding(4)
         '
         'MTbUsuario
         '
-        Me.MTbUsuario.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MTbUsuario.Margin = New System.Windows.Forms.Padding(4)
         Me.MTbUsuario.ReadOnly = True
         Me.MTbUsuario.Size = New System.Drawing.Size(135, 32)
         Me.MTbUsuario.Text = "DEFAULT"
@@ -257,8 +259,18 @@ Partial Class F01_Producto
         '
         'MPanelToolBarImprimir
         '
-        Me.MPanelToolBarImprimir.Location = New System.Drawing.Point(1160, 0)
-        Me.MPanelToolBarImprimir.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MPanelToolBarImprimir.Controls.Add(Me.btExcel)
+        Me.MPanelToolBarImprimir.Controls.Add(Me.btImportar)
+        Me.MPanelToolBarImprimir.Location = New System.Drawing.Point(1009, 0)
+        Me.MPanelToolBarImprimir.Margin = New System.Windows.Forms.Padding(4)
+        Me.MPanelToolBarImprimir.Size = New System.Drawing.Size(231, 70)
+        Me.MPanelToolBarImprimir.Controls.SetChildIndex(Me.MBtImprimir, 0)
+        Me.MPanelToolBarImprimir.Controls.SetChildIndex(Me.btImportar, 0)
+        Me.MPanelToolBarImprimir.Controls.SetChildIndex(Me.btExcel, 0)
+        '
+        'MBtImprimir
+        '
+        Me.MBtImprimir.Location = New System.Drawing.Point(159, 0)
         '
         'MBubbleBarUsuario
         '
@@ -456,7 +468,7 @@ Partial Class F01_Producto
         '
         Me.UcImagen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.UcImagen.Location = New System.Drawing.Point(81, 32)
-        Me.UcImagen.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.UcImagen.Margin = New System.Windows.Forms.Padding(2)
         Me.UcImagen.Name = "UcImagen"
         Me.UcImagen.Size = New System.Drawing.Size(142, 146)
         Me.UcImagen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -503,7 +515,7 @@ Partial Class F01_Producto
         Me.GroupPanelProdPack.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupPanelProdPack.Location = New System.Drawing.Point(0, 0)
         Me.GroupPanelProdPack.Name = "GroupPanelProdPack"
-        Me.GroupPanelProdPack.Padding = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.GroupPanelProdPack.Padding = New System.Windows.Forms.Padding(5)
         Me.GroupPanelProdPack.Size = New System.Drawing.Size(328, 207)
         '
         '
@@ -1225,7 +1237,7 @@ Partial Class F01_Producto
         Me.tbCodigoInterno.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.tbCodigoInterno.ButtonFreeText.Shortcut = DevComponents.DotNetBar.eShortcut.F2
         Me.tbCodigoInterno.Location = New System.Drawing.Point(109, 2)
-        Me.tbCodigoInterno.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.tbCodigoInterno.Margin = New System.Windows.Forms.Padding(2)
         Me.tbCodigoInterno.Name = "tbCodigoInterno"
         Me.tbCodigoInterno.Size = New System.Drawing.Size(99, 23)
         Me.tbCodigoInterno.TabIndex = 30
@@ -1553,7 +1565,7 @@ Partial Class F01_Producto
         Me.GroupPanelBusqueda.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupPanelBusqueda.Location = New System.Drawing.Point(3, 253)
         Me.GroupPanelBusqueda.Name = "GroupPanelBusqueda"
-        Me.GroupPanelBusqueda.Padding = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.GroupPanelBusqueda.Padding = New System.Windows.Forms.Padding(5)
         Me.GroupPanelBusqueda.Size = New System.Drawing.Size(1192, 247)
         '
         '
@@ -1618,13 +1630,49 @@ Partial Class F01_Producto
         Me.Timer1.Enabled = True
         Me.Timer1.Interval = 1000
         '
+        'btExcel
+        '
+        Me.btExcel.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton
+        Me.btExcel.ColorTable = DevComponents.DotNetBar.eButtonColor.Flat
+        Me.btExcel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btExcel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.btExcel.Image = Global.Presentacion.My.Resources.Resources.ExportarExcel1
+        Me.btExcel.ImageFixedSize = New System.Drawing.Size(55, 40)
+        Me.btExcel.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top
+        Me.btExcel.Location = New System.Drawing.Point(9, 0)
+        Me.btExcel.Name = "btExcel"
+        Me.btExcel.Padding = New System.Windows.Forms.Padding(0, 0, 0, 20)
+        Me.btExcel.Size = New System.Drawing.Size(75, 70)
+        Me.btExcel.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014
+        Me.btExcel.TabIndex = 12
+        Me.btExcel.Text = "EXPORTAR"
+        Me.btExcel.TextColor = System.Drawing.Color.Black
+        '
+        'btImportar
+        '
+        Me.btImportar.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton
+        Me.btImportar.ColorTable = DevComponents.DotNetBar.eButtonColor.Flat
+        Me.btImportar.Dock = System.Windows.Forms.DockStyle.Right
+        Me.btImportar.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.btImportar.Image = Global.Presentacion.My.Resources.Resources.ImportarExcel
+        Me.btImportar.ImageFixedSize = New System.Drawing.Size(55, 40)
+        Me.btImportar.ImagePosition = DevComponents.DotNetBar.eImagePosition.Top
+        Me.btImportar.Location = New System.Drawing.Point(84, 0)
+        Me.btImportar.Name = "btImportar"
+        Me.btImportar.Padding = New System.Windows.Forms.Padding(0, 0, 0, 20)
+        Me.btImportar.Size = New System.Drawing.Size(75, 70)
+        Me.btImportar.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014
+        Me.btImportar.TabIndex = 13
+        Me.btImportar.Text = "IMPORTAR"
+        Me.btImportar.TextColor = System.Drawing.Color.Black
+        '
         'F01_Producto
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(1240, 609)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "F01_Producto"
         Me.Opacity = 0.02R
         Me.Text = "F00_Producto"
@@ -1770,4 +1818,6 @@ Partial Class F01_Producto
     Friend WithEvents cbDosificacion As Janus.Windows.GridEX.EditControls.MultiColumnCombo
     Friend WithEvents lblDosificaion As DevComponents.DotNetBar.LabelX
     Friend WithEvents tbCodigoInterno As DevComponents.Editors.IntegerInput
+    Friend WithEvents btExcel As DevComponents.DotNetBar.ButtonX
+    Friend WithEvents btImportar As DevComponents.DotNetBar.ButtonX
 End Class
