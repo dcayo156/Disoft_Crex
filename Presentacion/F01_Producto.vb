@@ -1012,19 +1012,19 @@ Public Class F01_Producto
 
         'dar formato a las columnas
         With DgjBusqueda.RootTable.Columns("numi")
-            .Caption = "Código"
+            .Caption = "Cód. Sistema"
             .Key = "numi"
             .Width = 80
             .HeaderStyle.Font = FtTitulo
             .HeaderAlignment = Janus.Windows.GridEX.TextAlignment.Center
             .CellStyle.Font = FtNormal
             .CellStyle.TextAlignment = Janus.Windows.GridEX.TextAlignment.Far
-            .Visible = False
+            .Visible = True
         End With
 
 
         With DgjBusqueda.RootTable.Columns("codigo")
-            .Caption = "Código"
+            .Caption = "Cód. Interno"
             .Key = "codigo"
             .Width = 80
             .HeaderStyle.Font = FtTitulo
@@ -1034,7 +1034,7 @@ Public Class F01_Producto
             .Visible = True
         End With
         With DgjBusqueda.RootTable.Columns("cod")
-            .Caption = "Cod.Flex"
+            .Caption = "Cod. Prod."
             .Key = "cod"
             .Width = 80
             .HeaderStyle.Font = FtTitulo
